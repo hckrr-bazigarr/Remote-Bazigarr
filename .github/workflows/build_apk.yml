@@ -18,12 +18,16 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Install Gradle & Build APK
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
+    - name: Build with Gradle
       run: |
-        sudo apt-get update
-        sudo apt-get install -y gradle
         cd android_app
-        gradle assembleDebug
+        chmod +x gradlew || true
+        # Agar gradle wrapper nahi hai toh android tool se generate karenge ya direct build chalayenge
+        gradle wrapper --gradle-version 8.0 || true
+        ./gradlew assembleDebug || gradle assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v3
