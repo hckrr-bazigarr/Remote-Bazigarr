@@ -18,19 +18,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build APK Clean
+    - name: Build APK Direct
       run: |
         cd android_app
-        mkdir -p src/main/java/com/example/remotetool
-        mkdir -p src/main
-        # Ensure AndroidManifest is in standard location if not already
-        if [ -f "AndroidManifest.xml" ] && [ ! -f "src/main/AndroidManifest.xml" ]; then
-          mv AndroidManifest.xml src/main/
-        fi
-        
         gradle wrapper --gradle-version 8.0
         chmod +x gradlew
-        ./gradlew assembleDebug || gradle assembleDebug
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
