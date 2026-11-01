@@ -85,8 +85,8 @@ jobs:
                 android:supportsRtl="true"
                 android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
                 <activity
-                    android:name=".MainActivity"
-                    android:exported="true">
+                    name=".MainActivity"
+                    exported="true">
                     <intent-filter>
                         <action android:name="android.intent.action.MAIN" />
                         <category android:name="android.intent.category.LAUNCHER" />
@@ -96,10 +96,13 @@ jobs:
         </manifest>
         EOF
 
-        # Force Gradle version to 8.0 to avoid version mismatch errors
-        gradle wrapper --gradle-version 8.0 --distribution-type bin
-        chmod +x gradlew
-        ./gradlew app:assembleDebug --stacktrace
+        # Download and use stable Gradle 8.2 directly, bypassing runner's Gradle 9
+        wget -q https://services.gradle.org/distributions/gradle-8.2-bin.zip
+        unzip -q gradle-8.2-bin.zip
+        export PATH=$PWD/gradle-8.2/bin:$PATH
+
+        gradle -v
+        gradle app:assembleDebug --stacktrace
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
