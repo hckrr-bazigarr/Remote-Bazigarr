@@ -18,15 +18,21 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build APK Directly
+    - name: Setup Android SDK
+      uses: android-actions/setup-android@v2
+
+    - name: Build Debug APK
       run: |
         cd android_app
-        export SDKMAN_DIR="/usr/local/sdkman"
-        yes | sudo sdkmanager --licenses || true
-        # Gradle wrapper generate karke build chalayenge
-        gradle wrapper --gradle-version 8.0
-        chmod +x gradlew
-        ./gradlew assembleDebug
+        # Make gradlew executable if exists, else create gradle files
+        if [ -f "gradlew" ]; then
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        else
+          gradle wrapper
+          chmod +x gradlew
+          ./gradlew assembleDebug
+        fi
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
