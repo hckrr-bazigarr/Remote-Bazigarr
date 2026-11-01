@@ -18,13 +18,12 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Build APK with Gradle
+    - name: Install Gradle & Build APK
       run: |
+        sudo apt-get update
+        sudo apt-get install -y gradle
         cd android_app
-        chmod +x gradlew || true
-        # Agar gradlew nahi hai toh direct gradle command chalayenge ya wrapper generate karenge
-        gradle wrapper
-        ./gradlew assembleDebug
+        gradle assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v3
