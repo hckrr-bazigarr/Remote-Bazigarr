@@ -18,21 +18,23 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v2
-
-    - name: Build Debug APK
+    - name: Compile and Build APK
       run: |
         cd android_app
-        # Make gradlew executable if exists, else create gradle files
-        if [ -f "gradlew" ]; then
-          chmod +x gradlew
-          ./gradlew assembleDebug
-        else
-          gradle wrapper
-          chmod +x gradlew
-          ./gradlew assembleDebug
-        fi
+        # Download command-line tools manually to avoid external action crashes
+        mkdir -p build-tools-temp
+        cd build-tools-temp
+        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
+        unzip -q commandlinetools-linux-9477386_latest.zip
+        export ANDROID_HOME=$PWD
+        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/bin:$ANDROID_HOME/platform-tools
+        yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
+        sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        
+        cd ../
+        gradle wrapper --gradle-version 8.0
+        chmod +x gradlew
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
