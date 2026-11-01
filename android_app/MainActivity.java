@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int SCREEN_CAPTURE_REQUEST_CODE = 100;
     
     // Apna server URL yahan daalna (jaise ngrok ya cloudflare URL)
-    private static final String SERVER_URL = "YOUR_SERVER_URL_HERE/api/upload_logs";
+    private static final String SERVER_URL = "[https://quantities-cambridge-superb-somerset.trycloudflare.com](https://quantities-cambridge-superb-somerset.trycloudflare.com)/api/upload_logs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
