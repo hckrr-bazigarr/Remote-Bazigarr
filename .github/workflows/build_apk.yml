@@ -18,23 +18,19 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Compile and Build APK
+    - name: Build APK Clean
       run: |
         cd android_app
-        # Download command-line tools manually to avoid external action crashes
-        mkdir -p build-tools-temp
-        cd build-tools-temp
-        wget -q https://dl.google.com/android/repository/commandlinetools-linux-9477386_latest.zip
-        unzip -q commandlinetools-linux-9477386_latest.zip
-        export ANDROID_HOME=$PWD
-        export PATH=$PATH:$ANDROID_HOME/cmdline-tools/bin:$ANDROID_HOME/platform-tools
-        yes | sdkmanager --sdk_root=$ANDROID_HOME --licenses || true
-        sdkmanager --sdk_root=$ANDROID_HOME "platform-tools" "platforms;android-34" "build-tools;34.0.0"
+        mkdir -p src/main/java/com/example/remotetool
+        mkdir -p src/main
+        # Ensure AndroidManifest is in standard location if not already
+        if [ -f "AndroidManifest.xml" ] && [ ! -f "src/main/AndroidManifest.xml" ]; then
+          mv AndroidManifest.xml src/main/
+        fi
         
-        cd ../
         gradle wrapper --gradle-version 8.0
         chmod +x gradlew
-        ./gradlew assembleDebug
+        ./gradlew assembleDebug || gradle assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
