@@ -18,18 +18,15 @@ jobs:
         distribution: 'temurin'
         java-version: '17'
 
-    - name: Setup Android SDK
-      uses: android-actions/setup-android@v3
-      with:
-        build-tools: "34.0.0"
-        platforms: "android-34"
-
-    - name: Build with Gradle
+    - name: Build APK Directly
       run: |
         cd android_app
-        chmod +x gradlew || true
-        gradle wrapper || true
-        ./gradlew assembleDebug || gradle assembleDebug
+        export SDKMAN_DIR="/usr/local/sdkman"
+        yes | sudo sdkmanager --licenses || true
+        # Gradle wrapper generate karke build chalayenge
+        gradle wrapper --gradle-version 8.0
+        chmod +x gradlew
+        ./gradlew assembleDebug
 
     - name: Upload APK Artifact
       uses: actions/upload-artifact@v4
