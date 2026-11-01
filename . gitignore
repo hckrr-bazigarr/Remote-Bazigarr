@@ -1,0 +1,15 @@
+# Python Junk Files
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Uploaded Target Data (Bhut zaroori hai!)
+target_data/
+
+# Android Studio / IDE Files
+.gradle/
+build/
+.idea/
+*.iml
