@@ -1,2 +1,3 @@
 rootProject.name = "RemoteBazigarr"
 include ':android_app'
+project(':android_app').projectDir = file('android_app')
