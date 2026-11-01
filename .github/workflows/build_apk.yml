@@ -24,7 +24,6 @@ jobs:
         mkdir -p app/src/main/java/com/example/remotetool
         mkdir -p app/src/main
 
-        # Create proper settings.gradle with repositories
         cat << 'EOF' > settings.gradle
         pluginManagement {
             repositories {
@@ -44,16 +43,13 @@ jobs:
         include ':app'
         EOF
 
-        # Create proper app/build.gradle
         cat << 'EOF' > app/build.gradle
         plugins {
             id 'com.android.application'
         }
-
         android {
             namespace 'com.example.remotetool'
             compileSdk 34
-
             defaultConfig {
                 applicationId "com.example.remotetool"
                 minSdk 21
@@ -61,14 +57,12 @@ jobs:
                 versionCode 1
                 versionName "1.0"
             }
-
             buildTypes {
                 release {
                     minifyEnabled false
                 }
             }
         }
-
         dependencies {
             implementation 'androidx.appcompat:appcompat:1.6.1'
             implementation 'com.google.android.material:material:1.9.0'
@@ -79,28 +73,26 @@ jobs:
           mv MainActivity.java app/src/main/java/com/example/remotetool/; 
         fi
         
-        if [ ! -f "app/src/main/AndroidManifest.xml" ]; then
-          cat << 'EOF' > app/src/main/AndroidManifest.xml
-          <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-              package="com.example.remotetool">
-              <uses-permission android:name="android.permission.INTERNET" />
-              <application
-                  android:allowBackup="true"
-                  android:label="RemoteBazigarr"
-                  android:supportsRtl="true"
-                  android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
-                  <activity
-                      android:name=".MainActivity"
-                      android:exported="true">
-                      <intent-filter>
-                          <action android:name="android.intent.action.MAIN" />
-                          <category android:name="android.intent.category.LAUNCHER" />
-                      </intent-filter>
-                  </activity>
-              </application>
-          </manifest>
-          EOF
-        fi
+        cat << 'EOF' > app/src/main/AndroidManifest.xml
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+            package="com.example.remotetool">
+            <uses-permission android:name="android.permission.INTERNET" />
+            <application
+                android:allowBackup="true"
+                android:label="RemoteBazigarr"
+                android:supportsRtl="true"
+                android:theme="@style/Theme.AppCompat.Light.DarkActionBar">
+                <activity
+                    android:name=".MainActivity"
+                    android:exported="true">
+                    <intent-filter>
+                        <action android:name="android.intent.action.MAIN" />
+                        <category android:name="android.intent.category.LAUNCHER" />
+                    </intent-filter>
+                </activity>
+            </application>
+        </manifest>
+        EOF
 
         gradle wrapper --gradle-version 8.0
         chmod +x gradlew
